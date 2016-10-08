@@ -1,0 +1,31 @@
+﻿.bg-image {
+    position: relative;
+}
+.bg-image img {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+}
+.bg-image h1 {
+    position: absolute;
+    text-align: center;
+    top: 200px;
+    left: 0;
+    right: 0;
+    color: white;
+    font-size: 10em
+}
+.bg-image .container {
+    background-color: rgba(200,200,200,0.7);
+    border-radius: 4px;
+    position: absolute;
+    text-align: center;
+    top: 550px;
+    left: 0;
+    right: 700px;
+    color: white;
+    font-size: 30px;
+}
+.nav, .main {
+    text-align: center;
+}
