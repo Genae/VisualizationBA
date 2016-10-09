@@ -15,6 +15,8 @@ https://jquery.com/
 https://d3js.org/
 https://startbootstrap.com/template-overviews/scrolling-nav
 https://bootswatch.com/paper/
+http://leafletjs.com/
 
 Data
 https://www.aggdata.com/free/germany-postal-codes
+http://opendatalab.de/projects/geojson-utilities/

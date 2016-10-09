@@ -94,8 +94,12 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="data\geojson\deutschland.js" />
     <Content Include="packages.config" />
+    <Content Include="scripts\ngApp\app.js" />
     <Content Include="scripts\vendor\d3JS\LICENSE" />
+    <Content Include="scripts\vendor\leaflet\leaflet.js" />
+    <Content Include="style\css\leaflet.css" />
     <Content Include="style\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="style\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="style\fonts\glyphicons-halflings-regular.woff" />
@@ -120,15 +124,16 @@
     <Content Include="style\css\main.css" />
     <Content Include="style\css\scrolling-nav.css" />
     <Content Include="style\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="style\images\marker-icon-2x.png" />
+    <Content Include="style\images\marker-icon.png" />
+    <Content Include="style\images\marker-shadow.png" />
     <Content Include="style\images\pexels-photo-105221.jpeg" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="scripts\ngApp\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

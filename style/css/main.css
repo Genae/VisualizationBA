@@ -29,3 +29,10 @@
 .nav, .main {
     text-align: center;
 }
+#mapid {
+     height: 600px;
+    width: 600px;
+}
+.leaflet-container {
+    background: #fff;
+}
