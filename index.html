@@ -1,20 +1,23 @@
 <html>
 <head>
+     <!--stylesheats-->
+    <link rel="stylesheet" href="style/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style/css/scrolling-nav.css">
+    <link rel="stylesheet" href="style/css/leaflet.css"/>
+    <link rel="stylesheet" href="style/css/main.css">
+    <link rel="stylesheet" href="style/css/c3.css">
     <!--scripts-->
     <script src="scripts/vendor/jQuery/jquery-3.1.1.min.js"></script>
     <script src="scripts/vendor/jQuery/jquery.easing.min.js"></script>
     <script src="scripts/vendor/d3JS/d3.min.js"></script>
+    <script src="scripts/vendor/c3JS/c3.min.js"></script>
+    <script src="scripts/vendor/chromaJS/chroma.min.js"></script>
     <script src="scripts/vendor/angularJS/angular.min.js"></script>
     <script src="scripts/vendor/bootstrap/bootstrap.min.js"></script>
     <script src="scripts/vendor/bootstrap/scrolling-nav.js"></script>
     <script src="scripts/vendor/leaflet/leaflet.js"></script>
     <!--angularScripts-->
     <script src="scripts/ngApp/app.js"></script>
-    <!--stylesheats-->
-    <link rel="stylesheet" href="style/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style/css/scrolling-nav.css">
-    <link rel="stylesheet" href="style/css/leaflet.css"/>
-    <link rel="stylesheet" href="style/css/main.css">
     <!--data-->
     <script src="data/de_postal_codes.js"></script>
     <script src="data/geojson/deutschland.js"></script>
@@ -41,7 +44,7 @@
                     <a class="page-scroll" href="#page-top"></a>
                 </li>
                 <li class="">
-                    <a class="page-scroll" href="#section1">Section 1</a>
+                    <a class="page-scroll" href="#charts">Charts</a>
                 </li>
                 <li class="active">
                     <a class="page-scroll" href="#section2">Section 2</a>
@@ -74,47 +77,27 @@
                 <div class="col-md-5">
                 </div>
                 <div class="col-md-2">
-                    <a href="#section1" class="btn btn-primary btn-lg page-scroll" ng-disabled="postalCode.length !== 5">Begin Tour</a>
+                    <a href="#charts" class="btn btn-primary btn-lg page-scroll" ng-disabled="postalCode.length !== 5">Begin Tour</a>
                 </div>
             </div>
         </div>
     </div>
-        <section id="section1">
+        <section id="charts">
             <p>&nbsp;</p>
             <p>&nbsp;</p>
-            <h2>section1</h2>
-            <div id="mapid"></div>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
+            <h2>Charts</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div id="mapid"></div>
+                </div>
+                <div class="col-md-4">
+                    <div id="chart1"></div>
+                </div>
+                <div class="col-md-4">
+                    <div id="chart2"></div>
+                </div>
+            </div>
+            
         </section>
         <section id="section2">
             <p>&nbsp;</p>

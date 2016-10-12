@@ -97,8 +97,11 @@
     <Content Include="data\geojson\deutschland.js" />
     <Content Include="packages.config" />
     <Content Include="scripts\ngApp\app.js" />
+    <Content Include="scripts\vendor\c3JS\c3.min.js" />
+    <Content Include="scripts\vendor\chromaJS\chroma.min.js" />
     <Content Include="scripts\vendor\d3JS\LICENSE" />
     <Content Include="scripts\vendor\leaflet\leaflet.js" />
+    <Content Include="style\css\c3.css" />
     <Content Include="style\css\leaflet.css" />
     <Content Include="style\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="style\fonts\glyphicons-halflings-regular.ttf" />

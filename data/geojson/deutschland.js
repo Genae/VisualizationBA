@@ -5,7 +5,8 @@ if (window.data.geojson === undefined)
 
 window.data.geojson.deutschland = [{
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+            "ID" : "SL",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -41,7 +42,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "BW",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -77,7 +79,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "NW",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -113,7 +116,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "HB",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -149,7 +153,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "HE",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -185,7 +190,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "BB",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -221,7 +227,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "NI",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -257,7 +264,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "MV",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -293,7 +301,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "RP",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -329,7 +338,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "BE",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -365,7 +375,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "SN",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -401,7 +412,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "ST",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -437,7 +449,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "SH",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -473,7 +486,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "TH",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -509,7 +523,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "BY",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
@@ -545,7 +560,8 @@ window.data.geojson.deutschland = [{
 		}
 	}, {
 		"type" : "Feature",
-		"properties" : {
+		"properties": {
+		    "ID": "HH",
 			"ADE" : 2,
 			"GF" : 4,
 			"BSG" : 1,
