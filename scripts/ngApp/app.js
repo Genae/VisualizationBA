@@ -131,4 +131,18 @@ app.controller('mainController', function mainController($scope) {
             enabled: true
         }
     });
+
+    //window.data.sunshine
+    /*
+    [
+        [1, 1, 1, 1],
+        [1, -999, -999, 1],
+        [1, -999, -999, 1],
+        [1, 1, 1, 1]
+    ]
+    window.data.sunshine
+    */
+    var grid = GRD.load(window.data.sunshine);
+    var vec = grid.createPolygons(1);
+    console.log(vec);
 });

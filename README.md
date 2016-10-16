@@ -22,3 +22,6 @@ Javascript + Styles
 Data
 - https://www.aggdata.com/free/germany-postal-codes
 - http://opendatalab.de/projects/geojson-utilities/
+
+Algorithms
+- http://cardhouse.com/computer/vector.htm
