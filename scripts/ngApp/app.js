@@ -51,10 +51,15 @@ app.controller('mainController', function mainController($scope) {
         }
         return [x, y];
     }
+
+    //data
+    var grid = GRD.load(window.data.sunshine);
+    var vec = grid.createPolygons(6);
+
     //colorscale
     var colorScale = chroma
-      .scale(['#f4aa42', '#f4df42'])
-      .domain([exampleData[0].value, exampleData[exampleData.length-1].value]);
+      .scale(['#444442', '#11df42'])
+      .domain([grid.minValue, grid.maxValue]);
 
     //map
     var mouseEnter = function () {
@@ -77,13 +82,15 @@ app.controller('mainController', function mainController($scope) {
         $scope.map.flyToBounds(this.getBounds());
     }
 
+
     $scope.map = L.map('mapid', {
         zoomControl: false,
         attributionControl: false,
-        dragging: false,
         minZoom: 6,
-        maxZoom: 6
-    }).setView([51, 10], 6);
+        maxBounds: L.latLngBounds(L.latLng(46.66451741754238, 3.40576171875), L.latLng(54.96500166110205, 16.589355468750004))
+
+}).setView([51, 10], 6);
+    console.log($scope.map.getBounds());
     var layers = {};
     for (var i = 0; i < window.data.geojson.deutschland.length; i++) {
         var data = window.data.geojson.deutschland[i];
@@ -95,16 +102,52 @@ app.controller('mainController', function mainController($scope) {
             click: mouseClick
     });
     }
+    var dataLayers = [];
+    for (var i = 0; i < vec.length; i++) {
+        dataLayers[i] = L.geoJSON().addTo($scope.map);
+        dataLayers[i].addData({
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": vec[i].data
+            }
+        });
+        var color = colorScale(vec[i].value).hex();
+        dataLayers[i].setStyle({
+            fillColor: color,
+            fillOpacity: 1,
+            color: color,
+            weight: 3,
+            opacity: 1
+        });
+        dataLayers[i].bringToBack();
+    }
+    var lastZoom = 6;
+    $scope.map.on({
+        zoom: function() {
+            var newzoom = Math.floor($scope.map.getZoom());
+            if (Math.abs(lastZoom - newzoom) >= 1) {
+                lastZoom = newzoom;
+                var nw = Math.max((lastZoom - 4) * (lastZoom - 4), 3);
+                console.log(nw);
+                for (var dl = 0; dl < dataLayers.length; dl++) {
+                    dataLayers[dl].setStyle({
+                        weight: nw
+                    });
+                }
+            }
+        }
+    });
+
     for (var i = 0; i < exampleData.length; i++) {
         if (layers[exampleData[i].name] !== undefined) {
-            var color = colorScale(exampleData[i].value).hex();
             layers[exampleData[i].name].setStyle({
-                fillColor: color,
-                fillOpacity: 1,
-                color: chroma(color).darken(2),
+                fillOpacity: 0,
+                color: "#ffffff",
                 weight: 1,
-                opacity: 0.5
+                opacity: 1
             });
+            layers[exampleData[i].name].bringToFront();
         }
     }
 
@@ -142,7 +185,4 @@ app.controller('mainController', function mainController($scope) {
     ]
     window.data.sunshine
     */
-    var grid = GRD.load(window.data.sunshine);
-    var vec = grid.createPolygons(1);
-    console.log(vec);
 });

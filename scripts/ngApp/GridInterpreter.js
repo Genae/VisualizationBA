@@ -1,23 +1,26 @@
 ﻿GRD = {}
+var MIN_SIZE = 10;
+var SKIP_AMOUNT = 5;
 
 var createPolygons = function (numLayers) {
     var poly = [];
     var vec = [];
-    var lay = getLayersFromGrid(this.data, numLayers);
+    var lay = getLayersFromGrid(this, numLayers);
     for (var i = 0; i < lay.length; i++) {
         vec.push(getVectorsFromLayer(lay[i]));
     }
     for (var j = 0; j < lay.length; j++) {
         poly.push(getRingsFromVectors(vec[j]));
     }
-    for (var p = 0; p < lay.length; p++) {
+    for (var p = 0; p < poly.length; p++) {
         poly[p] = pixelToGeo(poly[p], this.data.length, this.data[0].length);
     }
     return poly;
 }
 
 //floodfill algorithm
-var getLayersFromGrid = function(grid, numLayers) {
+var getLayersFromGrid = function (gridObj, numLayers) {
+    var grid = gridObj.data;
     var checked = [];
     var layers = [];
     var x;
@@ -40,11 +43,14 @@ var getLayersFromGrid = function(grid, numLayers) {
             }
         }
     }
+    gridObj.minValue = min;
+    gridObj.maxValue = max;
     var amountPerLayer = (max - min) / numLayers;
 
     var floodfill = function (x, y, minVal, maxVal) {
         var layer = [];
         var queue = [];
+        var count = 0;
         queue.push([x, y]);
         while (queue.length > 0) {
             var cur = queue.shift();
@@ -58,6 +64,7 @@ var getLayersFromGrid = function(grid, numLayers) {
             if (layer[cx] === undefined) layer[cx] = [];
             layer[cx][cy] = 1;
             checked[cx][cy] = true;
+            count++;
 
             //add neighbours to queue
             if (cx > 0) queue.push([cx - 1, cy]);
@@ -65,6 +72,7 @@ var getLayersFromGrid = function(grid, numLayers) {
             if (cx < grid.length - 1) queue.push([cx + 1, cy]);
             if (cy < grid[x].length - 1) queue.push([cx, cy + 1]);
         }
+        if (count < MIN_SIZE) return undefined;
         return layer;
     };
 
@@ -76,11 +84,10 @@ var getLayersFromGrid = function(grid, numLayers) {
             //calcLayer
             var l = Math.floor((grid[x][y] - min) / amountPerLayer);
             var ff = floodfill(x, y, min + l * amountPerLayer, min + (l + 1) * amountPerLayer);
-            if(ff.length > 0)
-                layers.push(ff);
+            if(ff != undefined && ff.length > 0)
+                layers.push({ value: min + (l+0.5) * amountPerLayer, data: ff });
         }
     }
-
     return layers;
 }
 
@@ -151,11 +158,11 @@ var getVectorsFromLayer = function(layer) {
             status: 0
         }));
     };
-    for (var x = 0; x < layer.length; x++) {
-        if (layer[x] === undefined) continue;
-        for (var y = 0; y < layer[x].length; y++) {
-            if (layer[x][y] === undefined) continue;
-            if (layer[x][y] !== 0)
+    for (var x = 0; x < layer.data.length; x++) {
+        if (layer.data[x] === undefined) continue;
+        for (var y = 0; y < layer.data[x].length; y++) {
+            if (layer.data[x][y] === undefined) continue;
+            if (layer.data[x][y] !== 0)
                 addSquareVector(x,y);
         }
     }
@@ -214,28 +221,32 @@ var getVectorsFromLayer = function(layer) {
         }
     }
     
-    return cleanup(V);
+    return { value: layer.value, data: cleanup(V) };
 }
 
 var getRingsFromVectors = function(vectors) {
     var rings = [];
     var createRing = function (startIndex) {
-        var cur = vectors[startIndex];
+        var cur = vectors.data[startIndex];
         cur.status = -1;
         var ring = [[cur.sx, cur.sy], [cur.ex, cur.ey]];
+        var num = 0;
         while (cur.next !== startIndex) {
-            cur = vectors[cur.next];
+            cur = vectors.data[cur.next];
             cur.status = -1;
-            ring.push([cur.ex, cur.ey]);
+            if (cur.next === startIndex || num++ % SKIP_AMOUNT === 0)
+                ring.push([cur.ex, cur.ey]);
         }
         return ring;
     };
-    for (var i = 0; i < vectors.length; i++) {
-        if (vectors[i].status === 0) {
-            rings.push(createRing(i));
+    for (var i = 0; i < vectors.data.length; i++) {
+        if (vectors.data[i].status === 0) {
+            var ring = createRing(i);
+            if(rings.length === 0 || ring.length > MIN_SIZE)
+                rings.push(ring);
         }
     }
-    return rings;
+    return { value: vectors.value, data: rings };
 }
 
 var pixelToGeo = function(polygon, maxX, maxY) {
@@ -244,9 +255,9 @@ var pixelToGeo = function(polygon, maxX, maxY) {
     var minLong = 47.3;  //minY
     var maxLong = 55.09; //maxY
 
-    for (var r = 0; r < polygon.length; r++) {
-        for (var t = 0; t < polygon[r].length; t++) {
-            var tpl = polygon[r][t];
+    for (var r = 0; r < polygon.data.length; r++) {
+        for (var t = 0; t < polygon.data[r].length; t++) {
+            var tpl = polygon.data[r][t];
             var x = tpl[0];
             var y = tpl[1];
             tpl[0] = Math.round((((y + x/35) * (maxLat - minlat)) / (maxY + x/9) + minlat)*100)/100;
