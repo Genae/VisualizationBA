@@ -1,6 +1,8 @@
-﻿GRD = {}
-var MIN_SIZE = 10;
-var SKIP_AMOUNT = 5;
+GRD = {}
+var MIN_SIZE = 0;
+var SKIP_AMOUNT = 1;
+var RESOLUTION_DIVIDEND = 5;
+
 
 var createPolygons = function (numLayers) {
     var poly = [];
@@ -13,14 +15,14 @@ var createPolygons = function (numLayers) {
         poly.push(getRingsFromVectors(vec[j]));
     }
     for (var p = 0; p < poly.length; p++) {
-        poly[p] = pixelToGeo(poly[p], this.data.length, this.data[0].length);
+        poly[p] = pixelToGeo(poly[p], this.data[0].grid.length, this.data[0].grid[0].length);
     }
     return poly;
 }
 
 //floodfill algorithm
 var getLayersFromGrid = function (gridObj, numLayers) {
-    var grid = gridObj.data;
+    var grid = gridObj.getGrid();
     var checked = [];
     var layers = [];
     var x;
@@ -266,9 +268,80 @@ var pixelToGeo = function(polygon, maxX, maxY) {
     }
     return polygon;
 }
-GRD.load = function(grid) {
+
+var getGrid = function () {
+    if (this.data.length === 1) {
+        return this.data[0].grid;
+    }
+    var sumGrid = [];
+    for (var i = 0; i < this.data[0].grid.length; i++) {
+        sumGrid[i] = [];
+        for (var j = 0; j < this.data[0].grid[i].length; j++) {
+            var val = 0;
+            var num = 0;
+            for (var g = 0; g < this.data.length; g++) {
+                if (this.data[g].grid[i][j] !== -999) {
+                    var norm = ((this.data[g].grid[i][j] - this.data[g].min) / (this.data[g].max - this.data[g].min));
+                    val += (this.data[g].reverse ? 1 - norm : norm) * this.data[g].multiplier; //normalize between 0 and 1, multiply with multiplier
+                    num++;
+                }
+            }
+            if (num > 0) sumGrid[i][j] = val / num;
+            else sumGrid[i][j] = -999;
+        }
+    }
+    return sumGrid;
+}
+
+var load = function (grid, name, reverse) {
+    if (reverse === undefined) {
+        reverse = false;
+    }
+    var smallGrid = [];
+    var min = -999;
+    var max = -999;
+    for (var i = 0; i < grid.length; i += RESOLUTION_DIVIDEND) {
+        smallGrid[i / RESOLUTION_DIVIDEND] = [];
+        for (var j = 0; j < grid[i].length; j += RESOLUTION_DIVIDEND) {
+            var val = 0;
+            var num = 0;
+            for (var ii = 0; ii < RESOLUTION_DIVIDEND; ii++) {
+                for (var ij = 0; ij < RESOLUTION_DIVIDEND; ij++) {
+                    if (grid.length > (i + ii) && grid[i + ii].length > (j + ij)) {
+                        if (grid[i + ii][j + ij] !== -999) {
+                            val += grid[i + ii][j + ij];
+                            num++;
+                        }
+                    }
+                }
+            }
+            if (num > 0) {
+                smallGrid[i / RESOLUTION_DIVIDEND][j / RESOLUTION_DIVIDEND] = val / num;
+                if (smallGrid[i / RESOLUTION_DIVIDEND][j / RESOLUTION_DIVIDEND] !== -999) {
+                    if (min === -999) {
+                        min = smallGrid[i / RESOLUTION_DIVIDEND][j / RESOLUTION_DIVIDEND];
+                        max = smallGrid[i / RESOLUTION_DIVIDEND][j / RESOLUTION_DIVIDEND];
+                    }
+                    if (smallGrid[i / RESOLUTION_DIVIDEND][j / RESOLUTION_DIVIDEND] < min)
+                        min = smallGrid[i / RESOLUTION_DIVIDEND][j / RESOLUTION_DIVIDEND];
+                    if (smallGrid[i / RESOLUTION_DIVIDEND][j / RESOLUTION_DIVIDEND] > max)
+                        max = smallGrid[i / RESOLUTION_DIVIDEND][j / RESOLUTION_DIVIDEND];
+                }
+            }
+            else smallGrid[i / RESOLUTION_DIVIDEND][j / RESOLUTION_DIVIDEND] = -999;
+            
+        }
+    }
+    this.data.push({grid: smallGrid, multiplier: 100, min: min, max: max, reverse: reverse, name: name});
+    return this;
+}
+
+GRD.load = function(grid, name, reverse) {
     var grd = {};
-    grd.data = grid;
+    grd.data = [];
     grd.createPolygons = createPolygons;
+    grd.load = load;
+    grd.getGrid = getGrid;
+    grd.load(grid, name, reverse);
     return grd;
 }

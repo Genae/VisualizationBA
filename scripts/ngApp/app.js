@@ -1,4 +1,4 @@
-﻿var app = angular.module('app', []);
+var app = angular.module('app', []);
 
 app.controller('mainController', function mainController($scope) {
     
@@ -53,12 +53,13 @@ app.controller('mainController', function mainController($scope) {
     }
 
     //data
-    var grid = GRD.load(window.data.sunshine);
-    var vec = grid.createPolygons(6);
+    var grid = GRD.load(window.data.precipitation, 'precipitation', true);
+    grid.load(window.data.sunshine, 'sunshine');
+    var vec = grid.createPolygons(5);
 
     //colorscale
     var colorScale = chroma
-      .scale(['#444442', '#11df42'])
+      .scale(['#000000', '#000000'])
       .domain([grid.minValue, grid.maxValue]);
 
     //map
@@ -128,7 +129,7 @@ app.controller('mainController', function mainController($scope) {
             var newzoom = Math.floor($scope.map.getZoom());
             if (Math.abs(lastZoom - newzoom) >= 1) {
                 lastZoom = newzoom;
-                var nw = Math.max((lastZoom - 4) * (lastZoom - 4), 3);
+                var nw = Math.max(lastZoom, 3);
                 console.log(nw);
                 for (var dl = 0; dl < dataLayers.length; dl++) {
                     dataLayers[dl].setStyle({
