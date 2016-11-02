@@ -24,7 +24,10 @@
     <script src="data/geojson/deutschland.js"></script>
     <script src="data/weather/sunshine.js"></script>
     <script src="data/weather/precipitation.js"></script>
-    <script src="data/weather/airTemp2015.js"></script>
+    <script src="data/weather/airTemp.js"></script>
+    <script src="data/weather/sunshineR.js"></script>
+    <script src="data/weather/precipitationR.js"></script>
+    <script src="data/weather/airTempR.js"></script>
 
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top" ng-app="app" ng-controller="mainController">
@@ -95,10 +98,29 @@
                     <div id="mapid"></div>
                 </div>
                 <div class="col-md-4">
-                    <div id="chart1"></div>
+                    <!--Selector-->
+                    <table width="100%">
+                        <tr width="100%">
+                            <td width="100%">
+                                <div class="progress" style="height: 100px; border-radius: 10px">
+                                    <div class="progress-bar" role="progressbar" ng-style="getStyle(item)" ng-repeat="item in mixItems" style="height: 100px" id="{{item.name}}">
+                                        {{item.name}}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="item in mixItems">
+                            <td>
+                                <button class="btn btn-primary" style="width: 150px; margin: 5px"
+                                        ng-style="item.value === 0?{'background-color': 'red'} : {'background-color': 'green'}" 
+                                        ng-click="toggleItem(item)" ng-if="item.name !== 'empty'">{{item.name}}</button>
+                            </td>
+                        </tr>
+                    </table>
+                    
                 </div>
                 <div class="col-md-4">
-                    <div id="chart2"></div>
+                    <div id="chart1"></div>
                 </div>
             </div>
             

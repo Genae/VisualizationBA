@@ -336,12 +336,21 @@ var load = function (grid, name, reverse) {
     return this;
 }
 
+var setValue = function(name, value) {
+    for (let i = 0; i < this.data.length; i++) {
+        if (this.data[i].name === name) {
+            this.data[i].multiplier = value;
+        }
+    }
+}
+
 GRD.load = function(grid, name, reverse) {
     var grd = {};
     grd.data = [];
     grd.createPolygons = createPolygons;
     grd.load = load;
     grd.getGrid = getGrid;
+    grd.setValue = setValue;
     grd.load(grid, name, reverse);
     return grd;
 }

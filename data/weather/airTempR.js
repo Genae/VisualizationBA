@@ -1,0 +1,18 @@
+window.data.airTempR = [
+{ name: "SH", value: 96.890541740675  },
+{ name: "MV", value: 97.6084533438548 },
+{ name: "NI", value: 101.330824480668 },
+{ name: "HH", value: 100.846715328467 },
+{ name: "BB", value: 104.2067520283   },
+{ name: "HB", value: 103.504347826087 },
+{ name: "ST", value: 103.913206174315 },
+{ name: "BE", value: 105.25641025641  },
+{ name: "NW", value: 102.565272496831 },
+{ name: "SN", value: 97.049760990518  },
+{ name: "HE", value: 99.8752552850914 },
+{ name: "TH", value: 94.0261545039909 },
+{ name: "RP", value: 103.462771642323 },
+{ name: "BY", value: 95.8566118513848 },
+{ name: "BW", value: 96.7544477955878 },
+{ name: "SL", value: 105.889548693587 },
+];

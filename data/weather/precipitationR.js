@@ -1,0 +1,18 @@
+window.data.precipitationR = [
+{ name: "SH", value: 888.085775606868 },
+{ name: "MV", value: 591.206549615309 },
+{ name: "NI", value: 785.373962410219 },
+{ name: "HH", value: 816.330900243309 },
+{ name: "BB", value: 546.153881647249 },
+{ name: "HB", value: 772.478260869565 },
+{ name: "ST", value: 552.029624239904 },
+{ name: "BE", value: 503.078754578755 },
+{ name: "NW", value: 835.269201520913 },
+{ name: "SN", value: 664.601285165739 },
+{ name: "HE", value: 606.671523982999 },
+{ name: "TH", value: 591.034492588369 },
+{ name: "RP", value: 599.674860467878 },
+{ name: "BY", value: 712.367439390671 },
+{ name: "BW", value: 744.246297739673 },
+{ name: "SL", value: 644.393705463183 },
+];

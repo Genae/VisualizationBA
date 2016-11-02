@@ -95,9 +95,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="data\geojson\deutschland.js" />
-    <Content Include="data\weather\airTemp2015.js" />
+    <Content Include="data\weather\airTemp.js" />
+    <Content Include="data\weather\airTempR.js" />
     <Content Include="data\weather\precipitation.js" />
+    <Content Include="data\weather\precipitationR.js" />
     <Content Include="data\weather\sunshine.js" />
+    <Content Include="data\weather\sunshineR.js" />
     <Content Include="packages.config" />
     <Content Include="scripts\ngApp\app.js" />
     <Content Include="scripts\ngApp\gridInterpreter.js" />
