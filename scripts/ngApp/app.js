@@ -34,6 +34,11 @@ app.controller('mainController', function mainController($scope) {
     grid.load(window.data.sunshine, 'sunshine');
     grid.load(window.data.airTemp, 'airTemp');
 
+    $scope.mixedGrid = grid;
+    $scope.precGrid = GRD.load(window.data.precipitation, 'precipitation', true);
+    $scope.sunGrid = GRD.load(window.data.sunshine, 'sunshine');
+    $scope.tempGrid = GRD.load(window.data.airTemp, 'airTemp');
+
     var bars = [
         { data: window.data.precipitationR, name: 'precipitation', reverse : true},
         { data: window.data.sunshineR, name: 'sunshine', reverse: false },
@@ -41,13 +46,13 @@ app.controller('mainController', function mainController($scope) {
     ];
 
     $scope.mixItems = [
-        { name: 'precipitation', value: 100, color: "#0000ff" },
-        { name: 'sunshine', value: 100, color: "#ff0000" },
-        { name: 'airTemp', value: 100, color: "#ff7700" },
+        { name: 'precipitation', value: 100, color: "#2b83ba" },
+        { name: 'sunshine', value: 100, color: "#d7191c" },
+        { name: 'airTemp', value: 100, color: "#fdae61" },
         { name: 'empty', value: 0, color: "#aaaaaa" }
     ];
 
-    var normalizeValues = function() {
+    var normalizeValues = function(grid) {
         var sum = 0;
         var rerun = false;
         for (let i = 0; i < $scope.mixItems.length; i++) {
@@ -76,9 +81,9 @@ app.controller('mainController', function mainController($scope) {
         }
         
         if (rerun)
-            normalizeValues();
+            normalizeValues(grid);
         else {
-            loadDataLayers();
+            loadDataLayers(map, grid, true, ['#d7191c', '#fdae61', '#ffffbf', '#a6d96a', '#1a9641']);
             loadDataToBar();
         }
 
@@ -92,7 +97,7 @@ app.controller('mainController', function mainController($scope) {
                     item.value *= 1.3;
                 else
                     item.value /= 1.3;
-                normalizeValues();
+                normalizeValues($scope.mixedGrid);
                 $scope.$apply();
             });
         });
@@ -116,63 +121,81 @@ app.controller('mainController', function mainController($scope) {
             }
             item.value = 100 / num;
         }
-        normalizeValues();
+        normalizeValues($scope.mixedGrid);
     }
 
-    //map
-    var mouseEnter = function() {
-        this.bringToFront();
-        this.setStyle({
-            weight: 2,
-            opacity: 1
-        });
+    //map creation
+    var createMap = function(mapId, small) {
+        var map = L.map(mapId, {
+            zoomControl: false,
+            attributionControl: false,
+            minZoom: small ? 5 : 6,
+            maxBounds: L.latLngBounds(L.latLng(46.66451741754238, 3.40576171875), L.latLng(54.96500166110205, 16.589355468750004))
+
+        }).setView([51, 10], small ? 5 : 6);
+        return map;
     }
 
-    var mouseLeave = function() {
-        this.setStyle({
-            weight: 1,
-            opacity: .5
-        });
-    }
-
-    var mouseClick = function() {
-        $scope.map.options.maxZoom = 10;
-        $scope.map.flyToBounds(this.getBounds());
-    }
-
-
-    $scope.map = L.map('mapid', {
-        zoomControl: false,
-        attributionControl: false,
-        minZoom: 6,
-        maxBounds: L.latLngBounds(L.latLng(46.66451741754238, 3.40576171875), L.latLng(54.96500166110205, 16.589355468750004))
-
-    }).setView([51, 10], 6);
-    console.log($scope.map.getBounds());
-    var layers = {};
-    for (var i = 0; i < window.data.geojson.deutschland.length; i++) {
-        var data = window.data.geojson.deutschland[i];
-        layers[data.properties.ID] = L.geoJSON().addTo($scope.map);
-        layers[data.properties.ID].addData(data);
-        layers[data.properties.ID].on({
-            mouseover: mouseEnter,
-            mouseout: mouseLeave,
-            click: mouseClick
-        });
-    }
-    var dataLayers = [];
-    var loadDataLayers = function () {
-        for (let i = 0; i < dataLayers.length; i++) {
-            $scope.map.removeLayer(dataLayers[i]);
+    var loadGermanOverlay = function(map) {
+        var mouseEnter = function () {
+            this.bringToFront();
+            this.setStyle({
+                weight: 3,
+                opacity: 1
+            });
         }
+
+        var mouseLeave = function () {
+            this.setStyle({
+                weight: 2,
+                opacity: 1
+            });
+        }
+
+        var mouseClick = function () {
+            map.options.maxZoom = 10;
+            map.flyToBounds(this.getBounds());
+        }
+
+        var layers = {};
+        for (var i = 0; i < window.data.geojson.deutschland.length; i++) {
+            var data = window.data.geojson.deutschland[i];
+            layers[data.properties.ID] = L.geoJSON().addTo(map);
+            layers[data.properties.ID].addData(data);
+            layers[data.properties.ID].on({
+                mouseover: mouseEnter,
+                mouseout: mouseLeave,
+                click: mouseClick
+            });
+        }
+        for (var i = 0; i < exampleData.length; i++) {
+            if (layers[exampleData[i].name] !== undefined) {
+                layers[exampleData[i].name].setStyle({
+                    fillOpacity: 0,
+                    color: "#444444",
+                    weight: 2,
+                    opacity: 1
+                });
+                layers[exampleData[i].name].bringToFront();
+            }
+        }
+    }
+    
+    var loadDataLayers = function (map, grid, master, colors) {
+        if (map.dataLayers !== undefined) {
+            for (let i = 0; i < map.dataLayers.length; i++) {
+                map.removeLayer(map.dataLayers[i]);
+            }
+        }
+        map.dataLayers = [];
         var vec = grid.createPolygons(5);
         //colorscale
         var colorScale = chroma
-            .scale(['#000000', '#ffffff'])
-            .domain([grid.minValue, grid.maxValue]);
+            .scale(colors)
+            .domain([grid.minValue + (grid.maxValue - grid.minValue) / 10, grid.maxValue - (grid.maxValue - grid.minValue) / 10]);
         for (let i = 0; i < vec.length; i++) {
-            dataLayers[i] = L.geoJSON().addTo($scope.map);
-            dataLayers[i].addData({
+            map.dataLayers[i] = L.geoJSON().addTo(map);
+            map.dataLayers[i].addData({
                 "type": "Feature",
                 "geometry": {
                     "type": "Polygon",
@@ -180,75 +203,96 @@ app.controller('mainController', function mainController($scope) {
                 }
             });
             var color = colorScale(vec[i].value).hex();
-            dataLayers[i].setStyle({
+            map.dataLayers[i].setStyle({
                 fillColor: color,
                 fillOpacity: 1,
                 color: color,
                 weight: 3,
                 opacity: 1
             });
-            dataLayers[i].bringToBack();
+            map.dataLayers[i].bringToBack();
         }
-    }
-    loadDataLayers();
 
-
-    var lastZoom = 6;
-    $scope.map.on({
-        zoom: function() {
-            var newzoom = Math.floor($scope.map.getZoom());
-            if (Math.abs(lastZoom - newzoom) >= 1) {
-                lastZoom = newzoom;
-                var nw = Math.max(lastZoom, 3);
-                console.log(nw);
-                for (var dl = 0; dl < dataLayers.length; dl++) {
-                    dataLayers[dl].setStyle({
-                        weight: nw
-                    });
+        if (master) {
+            var lastZoom = 6;
+            map.on({
+                zoom: function () {
+                    for (var i = 0; i < $scope.smallMaps.length; i++) {
+                        $scope.smallMaps[i].flyTo(map.getCenter(), map.getZoom() - 1);
+                    }
+                    var newzoom = Math.floor(map.getZoom());
+                    if (Math.abs(lastZoom - newzoom) >= 1) {
+                        lastZoom = newzoom;
+                        var nw = Math.max(lastZoom, 3);
+                        for (var dl = 0; dl < map.dataLayers.length; dl++) {
+                            map.dataLayers[dl].setStyle({
+                                weight: nw
+                            });
+                        }
+                    }
+                },
+                move: function() {
+                    for (var i = 0; i < $scope.smallMaps.length; i++) {
+                        $scope.smallMaps[i].flyTo(map.getCenter(), map.getZoom() - 1);
+                    }
                 }
-            }
-        }
-    });
-
-    for (var i = 0; i < exampleData.length; i++) {
-        if (layers[exampleData[i].name] !== undefined) {
-            layers[exampleData[i].name].setStyle({
-                fillOpacity: 0,
-                color: "#ffffff",
-                weight: 1,
-                opacity: 1
             });
-            layers[exampleData[i].name].bringToFront();
         }
     }
 
+    //map mixed
+    var map = createMap('mapid', false);
+    loadGermanOverlay(map);
+    $scope.map = map;
+    loadDataLayers(map, grid, true, ['#d7191c', '#fdae61', '#ffffbf', '#a6d96a', '#1a9641']);
+
+    $scope.smallMaps = [];
+
+    //map Temp
+    var mapTemp = createMap('mapidTemp', true);
+    loadDataLayers(mapTemp, $scope.tempGrid, false, ['#2b83ba', '#abdda4', '#ffffbf', '#fdae61', '#d7191c']);
+    $scope.smallMaps.push(mapTemp);
+
+    //map Prec
+    var mapPrec = createMap('mapidPrec', true);
+    loadDataLayers(mapPrec, $scope.precGrid, false, ['#f1eef6', '#bdc9e1', '#74a9cf', '#2b8cbe', '#045a8d']);
+    $scope.smallMaps.push(mapPrec);
+
+    //map Sun
+    var mapSun = createMap('mapidSun', true);
+    loadDataLayers(mapSun, $scope.sunGrid, false, ['#ffffd4', '#fed98e', '#fe9929', '#d95f0e', '#993404']);
+    $scope.smallMaps.push(mapSun);
+    
     //chart1
-    $scope.data2 = dataToColumns(exampleData, 'sunshine');
-    $scope.chart1 = c3.generate({
-        bindto: '#chart1',
-        data: {
-            x: 'x',
-            columns: [
-                $scope.data2[0]
+    var createChart = function() {
+        $scope.data2 = dataToColumns(exampleData, 'sunshine');
+        $scope.chart1 = c3.generate({
+            bindto: '#chart1',
+            data: {
+                x: 'x',
+                columns: [
+                    $scope.data2[0]
+                ],
+                type: 'bar'
+            },
+            groups: [
+                []
             ],
-            type: 'bar'
-        },
-        groups: [
-            []
-        ],
-        axis: {
-            x: {
-                type: 'category'
-            }
-        },
-        color: {
-            pattern: ['#0000ff', '#ff0000', '#ff7700', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
-        },
-        zoom: {
-            enabled: true
-        },
-        order: null
-    });
+            axis: {
+                x: {
+                    type: 'category'
+                }
+            },
+            color: {
+                pattern: ['#2b83ba', '#d7191c', '#fdae61', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
+            },
+            zoom: {
+                enabled: true
+            },
+            order: null
+        });
+    }
+    createChart();
 
     var loadDataToBar = function () {
         var show = [];
