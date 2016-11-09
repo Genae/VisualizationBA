@@ -9,6 +9,9 @@ app.controller('mainController', function mainController($scope) {
         if (pc.length === 5) {
             if ($scope.marker === undefined) {
                 $scope.marker = L.marker([window.data.postalCodes[pc].latitude, window.data.postalCodes[pc].longitude]).addTo($scope.map);
+                for (var i = 0; i < $scope.smallMaps.length; i++) {
+                    L.marker([window.data.postalCodes[pc].latitude, window.data.postalCodes[pc].longitude]).addTo($scope.smallMaps[i]);
+                }
             } else {
                 $scope.marker.setLatLng([window.data.postalCodes[pc].latitude, window.data.postalCodes[pc].longitude]);
             }
