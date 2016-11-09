@@ -294,6 +294,34 @@ app.controller('mainController', function mainController($scope) {
     }
     createChart();
 
+
+    var sortColums = function(c) {
+        var bars = [];
+        for (var b = 0; b < c.length; b++) {
+            for (var i = 1; i < c[b].length; i++) {
+                if (b === 0) {
+                    bars.push({ name: c[0][i], sum: 0 });
+                } else {
+                    bars[i - 1][c[b][0]] = c[b][i];
+                    bars[i - 1].sum += c[b][i];
+                }
+            }
+        }
+        bars.sort(function (a, b) { return b.sum - a.sum });
+
+        var cnew = [];
+        for (var key in bars[0]) {
+            if (bars[0].hasOwnProperty(key) && key !== "sum") {
+                var col = [];
+                col.push(key.replace('name', 'x'));
+                for (let i = 0; i < bars.length; i++) {
+                    col.push(bars[i][key]);
+                }
+                cnew.push(col);
+            }
+        }
+        return cnew;
+    }
     var loadDataToBar = function () {
         var show = [];
         var hide = [];
@@ -330,6 +358,7 @@ app.controller('mainController', function mainController($scope) {
             }
             
         }
+        c = sortColums(c);
         $scope.chart1.load({
             columns: c
         });
