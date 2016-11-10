@@ -18,10 +18,13 @@ Javascript + Styles
 - http://leafletjs.com/
 - http://c3js.org/
 - http://gka.github.io/chroma.js/
+- http://colorbrewer2.org/
+- https://github.com/erikflowers/weather-icons
 
 Data
 - https://www.aggdata.com/free/germany-postal-codes
 - http://opendatalab.de/projects/geojson-utilities/
+- http://www.dwd.de/EN/climate_environment/cdc/cdc_node.html
 
 Algorithms
 - http://cardhouse.com/computer/vector.htm

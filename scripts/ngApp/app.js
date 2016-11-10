@@ -49,10 +49,10 @@ app.controller('mainController', function mainController($scope) {
     ];
 
     $scope.mixItems = [
-        { name: 'precipitation', value: 100, color: "#2b83ba" },
-        { name: 'sunshine', value: 100, color: "#d7191c" },
-        { name: 'airTemp', value: 100, color: "#fdae61" },
-        { name: 'empty', value: 0, color: "#aaaaaa" }
+        { name: 'precipitation', value: 100, color: "#2b83ba", icon: "wi wi-rain" },
+        { name: 'sunshine', value: 100, color: "#d7191c", icon: "wi wi-day-sunny" },
+        { name: 'airTemp', value: 100, color: "#fdae61", icon: "wi wi-thermometer" },
+        { name: 'empty', value: 0, color: "#aaaaaa", icon: "wi wi-stars" }
     ];
 
     var normalizeValues = function(grid) {

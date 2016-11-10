@@ -1,4 +1,4 @@
-﻿.bg-image {
+.bg-image {
     position: relative;
 }
 .bg-image img {
@@ -31,8 +31,24 @@
 }
 #mapid {
      height: 600px;
-    width: 600px;
+    width: 480px;
 }
 .leaflet-container {
-    background: #fff;
+    background: #FFF;
+}
+
+html, body {
+    margin: 0;
+    height:100%;
+    width:100%;
+    padding:0;
+}
+
+section {
+    display: block;
+    background: #FFF;
+    height:100%;
+    width:100%;
+    padding: 20px;
+    box-sizing:border-box;
 }

@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="style/css/leaflet.css"/>
     <link rel="stylesheet" href="style/css/main.css">
     <link rel="stylesheet" href="style/css/c3.css">
+    <link rel="stylesheet" href="style/css/weather-icons.min.css"/>
     <!--scripts-->
     <script src="scripts/vendor/jQuery/jquery-3.1.1.min.js"></script>
     <script src="scripts/vendor/jQuery/jquery.easing.min.js"></script>
@@ -94,26 +95,26 @@
             <p>&nbsp;</p>
             <h2>Charts</h2>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div id="mapid"></div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <!--Selector-->
                     <div class="col-md-12">
                         <div class="progress" style="height: 100px; border-radius: 10px">
                             <div class="progress-bar" role="progressbar" ng-style="getStyle(item)" ng-repeat="item in mixItems" style="height: 100px" id="{{item.name}}">
-                                {{item.name}}
+                                <i ng-class="item.icon" style="font-size: 50px; margin-top: 25px"></i>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4" ng-repeat="item in mixItems">
-                        <button class="btn btn-primary" style="width: 150px; margin: 5px"
+                        <button class="btn btn-primary" style="width: 100%; margin: 5px"
                                 ng-style="item.value === 0?{'background-color': 'red'} : {'background-color': 'green'}"
                                 ng-click="toggleItem(item)" ng-if="item.name !== 'empty'">
-                            {{item.name}}
+                            <i ng-class="item.icon" style="font-size: 20px"></i>
                         </button>
                     </div>
-                    <div class="col-md-12" style="min-height: 300px">
+                    <div class="col-md-12" style="min-height: 300px; margin-top: 50px">
                         <div id="mapidPrec" class="col-md-4" style="min-height: 300px"></div>
                         <div id="mapidSun" class="col-md-4" style="min-height: 300px"></div>
                         <div id="mapidTemp" class="col-md-4" style="min-height: 300px"></div>

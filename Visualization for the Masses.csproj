@@ -110,11 +110,16 @@
     <Content Include="scripts\vendor\leaflet\leaflet.js" />
     <Content Include="style\css\c3.css" />
     <Content Include="style\css\leaflet.css" />
+    <Content Include="style\css\weather-icons.min.css" />
     <Content Include="style\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="style\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="style\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="style\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="data\de_postal_codes.js" />
+    <Content Include="style\font\weathericons-regular-webfont.eot" />
+    <Content Include="style\font\weathericons-regular-webfont.ttf" />
+    <Content Include="style\font\weathericons-regular-webfont.woff" />
+    <Content Include="style\font\weathericons-regular-webfont.woff2" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -134,6 +139,7 @@
     <Content Include="style\css\main.css" />
     <Content Include="style\css\scrolling-nav.css" />
     <Content Include="style\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="style\font\weathericons-regular-webfont.svg" />
     <Content Include="style\images\marker-icon-2x.png" />
     <Content Include="style\images\marker-icon.png" />
     <Content Include="style\images\marker-shadow.png" />
