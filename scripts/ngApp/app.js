@@ -2,18 +2,30 @@ var app = angular.module('app', []);
 
 app.controller('mainController', function mainController($scope) {
 
+    $scope.slider = $("#slider").slider({
+        id: "",
+        min: 0,
+        max: 100,
+        step: 10,
+        range: true,
+        value: [10, 90]
+    });
     //Postal Code
     $scope.postalCode = "";
 
     $scope.getCityName = function(pc) {
         if (pc.length === 5) {
             if ($scope.marker === undefined) {
+                $scope.smallmarker = [];
                 $scope.marker = L.marker([window.data.postalCodes[pc].latitude, window.data.postalCodes[pc].longitude]).addTo($scope.map);
                 for (var i = 0; i < $scope.smallMaps.length; i++) {
-                    L.marker([window.data.postalCodes[pc].latitude, window.data.postalCodes[pc].longitude]).addTo($scope.smallMaps[i]);
+                    $scope.smallmarker.push(L.marker([window.data.postalCodes[pc].latitude, window.data.postalCodes[pc].longitude]).addTo($scope.smallMaps[i]));
                 }
             } else {
                 $scope.marker.setLatLng([window.data.postalCodes[pc].latitude, window.data.postalCodes[pc].longitude]);
+                for (var i = 0; i < $scope.smallmarker.length; i++) {
+                    $scope.smallmarker[i].setLatLng([window.data.postalCodes[pc].latitude, window.data.postalCodes[pc].longitude]);
+                }
             }
             return window.data.postalCodes[pc].placeName;
         }
@@ -104,6 +116,10 @@ app.controller('mainController', function mainController($scope) {
                 $scope.$apply();
             });
         });
+        $scope.slider.on("change", function (ev) {
+            if (ev.value.newValue[0] !== ev.value.oldValue[0] || ev.value.newValue[1] !== ev.value.oldValue[1])
+                normalizeValues($scope.mixedGrid);
+        });
     });
 
     $scope.getStyle = function(item) {
@@ -127,6 +143,50 @@ app.controller('mainController', function mainController($scope) {
         normalizeValues($scope.mixedGrid);
     }
 
+    var mouseEnterSynced = function(state) {
+        $scope.map.layers[state].bringToFront();
+        $scope.map.layers[state].setStyle({
+            color: "#BBBBFF",
+            weight: 2,
+            opacity: 1
+        });
+        for (let i = 0; i < $scope.smallMaps.length; i++) {
+            $scope.smallMaps[i].layers[state].bringToFront();
+            $scope.smallMaps[i].layers[state].setStyle({
+                color: "#BBBBBB",
+                weight: 2,
+                opacity: 1
+            });
+        }
+        var index;
+        for (index = 0; index < $scope.columns[0].length - 1; index++) {
+            if($scope.columns[0][index + 1] === state)
+                break;
+        }
+        $(".c3-event-rect-" + index).css("fill-opacity", 0.1);
+    }
+
+    var mouseExitSynced = function (state) {
+        $scope.map.layers[state].setStyle({
+            color: "#666666",
+            weight: 1,
+            opacity: 1
+        });
+        for (let i = 0; i < $scope.smallMaps.length; i++) {
+            $scope.smallMaps[i].layers[state].setStyle({
+                color: "#666666",
+                weight: 1,
+                opacity: 1
+            });
+        }
+        var index;
+        for (index = 0; index < $scope.columns[0].length - 1; index++) {
+            if ($scope.columns[0][index + 1] === state)
+                break;
+        }
+        $(".c3-event-rect-" + index).css("fill-opacity", 0);
+    }
+
     //map creation
     var createMap = function(mapId, small) {
         var map = L.map(mapId, {
@@ -141,18 +201,15 @@ app.controller('mainController', function mainController($scope) {
 
     var loadGermanOverlay = function(map) {
         var mouseEnter = function () {
-            this.bringToFront();
-            this.setStyle({
-                weight: 3,
-                opacity: 1
-            });
+            for (var ln in this._layers) {
+                mouseEnterSynced(this._layers[ln].feature.properties.ID);
+            }
         }
 
         var mouseLeave = function () {
-            this.setStyle({
-                weight: 2,
-                opacity: 1
-            });
+            for (var ln in this._layers) {
+                mouseExitSynced(this._layers[ln].feature.properties.ID);
+            }
         }
 
         var mouseClick = function () {
@@ -175,13 +232,14 @@ app.controller('mainController', function mainController($scope) {
             if (layers[exampleData[i].name] !== undefined) {
                 layers[exampleData[i].name].setStyle({
                     fillOpacity: 0,
-                    color: "#444444",
-                    weight: 2,
+                    color: "#666666",
+                    weight: 1,
                     opacity: 1
                 });
                 layers[exampleData[i].name].bringToFront();
             }
         }
+        map.layers = layers;
     }
     
     var loadDataLayers = function (map, grid, master, colors) {
@@ -191,7 +249,7 @@ app.controller('mainController', function mainController($scope) {
             }
         }
         map.dataLayers = [];
-        var vec = grid.createPolygons(5);
+        var vec = grid.createPolygons(5, $scope.slider[0].value);
         //colorscale
         var colorScale = chroma
             .scale(colors)
@@ -254,16 +312,19 @@ app.controller('mainController', function mainController($scope) {
     //map Temp
     var mapTemp = createMap('mapidTemp', true);
     loadDataLayers(mapTemp, $scope.tempGrid, false, ['#2b83ba', '#abdda4', '#ffffbf', '#fdae61', '#d7191c']);
+    loadGermanOverlay(mapTemp);
     $scope.smallMaps.push(mapTemp);
 
     //map Prec
     var mapPrec = createMap('mapidPrec', true);
     loadDataLayers(mapPrec, $scope.precGrid, false, ['#f1eef6', '#bdc9e1', '#74a9cf', '#2b8cbe', '#045a8d']);
+    loadGermanOverlay(mapPrec);
     $scope.smallMaps.push(mapPrec);
 
     //map Sun
     var mapSun = createMap('mapidSun', true);
     loadDataLayers(mapSun, $scope.sunGrid, false, ['#ffffd4', '#fed98e', '#fe9929', '#d95f0e', '#993404']);
+    loadGermanOverlay(mapSun);
     $scope.smallMaps.push(mapSun);
     
     //chart1
@@ -276,6 +337,12 @@ app.controller('mainController', function mainController($scope) {
                 columns: [
                     $scope.data2[0]
                 ],
+                onmouseover: function (obj) {
+                    mouseEnterSynced($scope.columns[0][obj.x+1]);
+                },
+                onmouseout: function (obj) {
+                    mouseExitSynced($scope.columns[0][obj.x + 1]);
+                },
                 type: 'bar'
             },
             groups: [
@@ -291,6 +358,16 @@ app.controller('mainController', function mainController($scope) {
             },
             zoom: {
                 enabled: true
+            },
+            tooltip: {
+                format: {
+                    title: function (d) { return 'Data ' + d; },
+                    value: function (value, ratio, id) {
+                        var format = d3.format('.3n');
+                        return format(value);
+                    }
+                    //            value: d3.format(',') // apply this format to both y and y2
+                }
             },
             order: null
         });
@@ -365,6 +442,7 @@ app.controller('mainController', function mainController($scope) {
         $scope.chart1.load({
             columns: c
         });
+        $scope.columns = c;
         $scope.chart1.show(show);
         $scope.chart1.groups([show]);
         $scope.chart1.hide(hide);

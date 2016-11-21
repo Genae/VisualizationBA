@@ -4,10 +4,10 @@ var SKIP_AMOUNT = 1;
 var RESOLUTION_DIVIDEND = 5;
 
 
-var createPolygons = function (numLayers) {
+var createPolygons = function (numLayers, domain) {
     var poly = [];
     var vec = [];
-    var lay = getLayersFromGrid(this, numLayers);
+    var lay = getLayersFromGrid(this, numLayers, domain);
     for (var i = 0; i < lay.length; i++) {
         vec.push(getVectorsFromLayer(lay[i]));
     }
@@ -21,7 +21,7 @@ var createPolygons = function (numLayers) {
 }
 
 //floodfill algorithm
-var getLayersFromGrid = function (gridObj, numLayers) {
+var getLayersFromGrid = function (gridObj, numLayers, domain) {
     var grid = gridObj.getGrid();
     var checked = [];
     var layers = [];
@@ -45,8 +45,10 @@ var getLayersFromGrid = function (gridObj, numLayers) {
             }
         }
     }
-    gridObj.minValue = min;
-    gridObj.maxValue = max;
+    gridObj.minValue = min + (max-min)*domain[0] / 100;
+    gridObj.maxValue = max - (max - min) * (100 - domain[1]) / 100;
+    min = gridObj.minValue;
+    max = gridObj.maxValue;
     var amountPerLayer = (max - min) / numLayers;
 
     var floodfill = function (x, y, minVal, maxVal) {

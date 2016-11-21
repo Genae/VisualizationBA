@@ -4,9 +4,10 @@
     <link rel="stylesheet" href="style/css/bootstrap.min.css">
     <link rel="stylesheet" href="style/css/scrolling-nav.css">
     <link rel="stylesheet" href="style/css/leaflet.css"/>
-    <link rel="stylesheet" href="style/css/main.css">
     <link rel="stylesheet" href="style/css/c3.css">
     <link rel="stylesheet" href="style/css/weather-icons.min.css"/>
+    <link rel="stylesheet" href="style/css/bootstrap-slider.css">
+    <link rel="stylesheet" href="style/css/main.css">
     <!--scripts-->
     <script src="scripts/vendor/jQuery/jquery-3.1.1.min.js"></script>
     <script src="scripts/vendor/jQuery/jquery.easing.min.js"></script>
@@ -17,6 +18,8 @@
     <script src="scripts/vendor/bootstrap/bootstrap.min.js"></script>
     <script src="scripts/vendor/bootstrap/scrolling-nav.js"></script>
     <script src="scripts/vendor/leaflet/leaflet.js"></script>
+    <script src="scripts/vendor/bootstrap-slider/bootstrap-slider.js"></script>
+
     <!--angularScripts-->
     <script src="scripts/ngApp/app.js"></script>
     <script src="scripts/ngApp/gridInterpreter.js"></script>
@@ -96,7 +99,14 @@
             <h2>Charts</h2>
             <div class="row">
                 <div class="col-md-3">
-                    <div id="mapid"></div>
+                    <div class="col-md-12" id="mapid"></div>
+                    <div class="col-md-12">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div id="slider"></div>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
                 </div>
                 <div class="col-md-5">
                     <!--Selector-->

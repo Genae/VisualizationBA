@@ -104,10 +104,12 @@
     <Content Include="packages.config" />
     <Content Include="scripts\ngApp\app.js" />
     <Content Include="scripts\ngApp\gridInterpreter.js" />
+    <Content Include="scripts\vendor\bootstrap-slider\bootstrap-slider.js" />
     <Content Include="scripts\vendor\c3JS\c3.min.js" />
     <Content Include="scripts\vendor\chromaJS\chroma.min.js" />
     <Content Include="scripts\vendor\d3JS\LICENSE" />
     <Content Include="scripts\vendor\leaflet\leaflet.js" />
+    <Content Include="style\css\bootstrap-slider.css" />
     <Content Include="style\css\c3.css" />
     <Content Include="style\css\leaflet.css" />
     <Content Include="style\css\weather-icons.min.css" />

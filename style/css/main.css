@@ -52,3 +52,23 @@ section {
     padding: 20px;
     box-sizing:border-box;
 }
+
+.slider-track-low {
+    background-color: #d7191c;
+}
+
+.slider-track-high {
+    background-color: #1a9641;
+}
+.slider-selection {
+    background: linear-gradient(to right, #d7191c, #fdae61, #ffffbf, #a6d96a, #1a9641);
+}
+
+.slider-handle {
+    margin-top: 0!important;
+    background-image: linear-gradient(to bottom, #666666 0%, #333333 100%)
+}
+
+.slider-horizontal {
+    width: 100% !important
+}
