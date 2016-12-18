@@ -1,7 +1,7 @@
 GRD = {}
 var MIN_SIZE = 0;
 var SKIP_AMOUNT = 1;
-var RESOLUTION_DIVIDEND = 5;
+var RESOLUTION_DIVIDEND = 10;
 
 
 var createPolygons = function (numLayers, domain) {

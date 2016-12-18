@@ -98,7 +98,7 @@ app.controller('mainController', function mainController($scope) {
         if (rerun)
             normalizeValues(grid);
         else {
-            loadDataLayers(map, grid, true, ['#d7191c', '#fdae61', '#ffffbf', '#a6d96a', '#1a9641']);
+            loadDataLayers($scope.map, grid, false, ['#d7191c', '#fdae61', '#ffffbf', '#a6d96a', '#1a9641']);
             loadDataToBar();
         }
 
@@ -250,7 +250,10 @@ app.controller('mainController', function mainController($scope) {
             }
         }
         map.dataLayers = [];
-        var vec = grid.createPolygons(5, $scope.slider[0].value);
+        var domain = $scope.slider[0].value;
+        if (grid.data.length === 1 && grid.data[0].name === "airTemp")
+            domain = [0, 100];
+        var vec = grid.createPolygons(5, domain);
         //colorscale
         var colorScale = chroma
             .scale(colors)
@@ -293,7 +296,7 @@ app.controller('mainController', function mainController($scope) {
                         }
                     }
                 },
-                move: function() {
+                moveend: function () {
                     for (var i = 0; i < $scope.smallMaps.length; i++) {
                         $scope.smallMaps[i].flyTo(map.getCenter(), map.getZoom() - 1);
                     }
@@ -362,10 +365,10 @@ app.controller('mainController', function mainController($scope) {
             },
             tooltip: {
                 format: {
-                    title: function (d) { return 'Data ' + d; },
+                    title: function (d) { return $scope.columns[0][d+1]; },
                     value: function (value, ratio, id) {
                         var format = d3.format('.3n');
-                        return format(value);
+                        return "rating: " + format(value);
                     }
                     //            value: d3.format(',') // apply this format to both y and y2
                 }
