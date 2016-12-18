@@ -120,6 +120,7 @@ app.controller('mainController', function mainController($scope) {
             if (ev.value.newValue[0] !== ev.value.oldValue[0] || ev.value.newValue[1] !== ev.value.oldValue[1])
                 normalizeValues($scope.mixedGrid);
         });
+        normalizeValues($scope.mixedGrid);
     });
 
     $scope.getStyle = function(item) {

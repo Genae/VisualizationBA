@@ -57,12 +57,6 @@
                 <li class="">
                     <a class="page-scroll" href="#charts">Charts</a>
                 </li>
-                <li class="active">
-                    <a class="page-scroll" href="#section2">Section 2</a>
-                </li>
-                <li class="">
-                    <a class="page-scroll" href="#section3">Section 3</a>
-                </li>
             </ul>
         </div>
     </div><!-- /.container-fluid -->
@@ -70,8 +64,8 @@
     <div class="bg-image">
         <img src="style/images/pexels-photo-105221.jpeg">
         <h1>Climate and Weather</h1>
-        <div class="container">
-            <span>Climate change is all around us. We hear about global warming, melting poles, hurricanes in the caribics. But have you ever thought about what climate change means for you? Enter your postal code to find out:</span>
+        <div class="container" style="width: 900px">
+            <span>When you want to have nice weather during your holidays you would rather go to Rome than to London. But where to go if you want to stay in Germany? Enter a postal code to find out:</span>
             <br/>
             <div class="col-md-12" style="margin: 10px">
                 <div class="col-md-4">
@@ -85,10 +79,11 @@
                 </div>
             </div>
             <div class="col-md-12" style="margin: 10px">
-                <div class="col-md-5">
+                <div class="col-md-4">
                 </div>
-                <div class="col-md-2">
-                    <a href="#charts" class="btn btn-primary btn-lg page-scroll" ng-disabled="postalCode.length !== 5">Begin Tour</a>
+                <div class="col-md-4">
+                    <a href="#charts" class="btn btn-primary btn-lg page-scroll" ng-if="postalCode.length !== 5">Start without Position</a>
+                    <a href="#charts" class="btn btn-primary btn-lg page-scroll" ng-if="postalCode.length === 5">Begin Tour</a>
                 </div>
             </div>
         </div>
@@ -96,7 +91,6 @@
         <section id="charts">
             <p>&nbsp;</p>
             <p>&nbsp;</p>
-            <h2>Charts</h2>
             <div class="row">
                 <div class="col-md-3">
                     <div class="col-md-12" id="mapid"></div>
@@ -113,15 +107,19 @@
                     <div class="col-md-12">
                         <div class="progress" style="height: 100px; border-radius: 10px">
                             <div class="progress-bar" role="progressbar" ng-style="getStyle(item)" ng-repeat="item in mixItems" style="height: 100px" id="{{item.name}}">
-                                <i ng-class="item.icon" style="font-size: 50px; margin-top: 25px"></i>
+                                <span style="font-size: 60px" ng-style="item.name === 'precipitation' ? {'text-decoration': 'line-through'} : {}">
+                                    &nbsp;<i ng-class="item.icon" style="font-size: 50px; margin-top: 25px" ng-style="item.name === 'precipitation' ? {'text-decoration': 'line-through'} : {}"></i>&nbsp;
+                                </span>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4" ng-repeat="item in mixItems">
-                        <button class="btn btn-primary" style="width: 100%; margin: 5px"
+                        <button class="btn btn-primary" style="width: 100%; height: 30px"
                                 ng-style="item.value === 0?{'background-color': 'red'} : {'background-color': 'green'}"
                                 ng-click="toggleItem(item)" ng-if="item.name !== 'empty'">
-                            <i ng-class="item.icon" style="font-size: 20px"></i>
+                            <span style="font-size: 20px; margin-top: -9px; display:inline-block" ng-style="item.name === 'precipitation' ? {'text-decoration': 'line-through'} : {}">
+                                &nbsp;<i ng-class="item.icon" style="font-size: 20px" ng-style="item.name === 'precipitation' ? {'text-decoration': 'line-through'} : {}"></i>&nbsp;
+                            </span>
                         </button>
                     </div>
                     <div class="col-md-12" style="min-height: 300px; margin-top: 50px">
@@ -136,78 +134,5 @@
             </div>
             
         </section>
-        <section id="section2">
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <h2>section2</h2>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-        </section>
-        <section id="section3">
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <h2>section3</h2>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-            <p>a</p>
-        </section>
-
 </body>
 </html>
